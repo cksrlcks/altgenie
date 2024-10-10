@@ -5,45 +5,47 @@ import Section from '../common/Section';
 import styles from './style.module.css';
 
 //임시데이터
-import data from './data.json';
+import data from './dataNarrow.json';
 
 export default function Result() {
+  const [scale, setScale] = useState(1);
   const resultImg = useRef<HTMLImageElement>(null);
-  const [scaledImgDimesion, setScaledImgDimension] = useState<{
-    w: number;
-    h: number;
-  } | null>(null);
-  const [ratio, setRatio] = useState(1);
-  // const [scaledBoundPosition, setScaledBoundPosition] = useState<{x:number, y:number}[]|null>(null)
+  const imgContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (resultImg.current) {
-      const img = resultImg.current;
-      const naturalWidth = img.naturalWidth;
-      const naturalHeight = img.naturalHeight;
-      const ratio = naturalWidth / naturalHeight;
+    if (resultImg.current && imgContainer.current) {
+      const containerRatio =
+        imgContainer.current.clientWidth / imgContainer.current.clientHeight;
+      const naturalWidth = resultImg.current.naturalWidth;
+      const naturalHeight = resultImg.current.naturalHeight;
+      const imgRatio = naturalWidth / naturalHeight;
 
-      const scaledHeight = img.clientHeight;
-      const scaledWidth = scaledHeight * ratio;
-      setScaledImgDimension({ w: scaledWidth, h: scaledHeight });
-      setRatio(scaledWidth / naturalWidth);
+      if (imgRatio <= containerRatio) {
+        //컨테이너의 비율보다 작아서 양옆이 남는경우
+        const scaledHeight = resultImg.current.clientHeight;
+        setScale(scaledHeight / naturalHeight);
+      } else {
+        //컨테이너 비율보다 커서 위아래가 남는경우
+        const scaledWidth = resultImg.current.clientWidth;
+        setScale(scaledWidth / naturalWidth);
+      }
     }
   }, []);
 
   return (
     <>
       <Section title="이미지 분석 결과">
-        <div className={styles['result-img']}>
-          <img src="/img/test.png" alt="dd" ref={resultImg} />
-          {scaledImgDimesion && (
+        <div className={styles['result-img']} ref={imgContainer}>
+          <img src="/img/testNarrow.png" alt="dd" ref={resultImg} />
+          {resultImg.current && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width={scaledImgDimesion.w}
-              height={scaledImgDimesion.h}
+              width={resultImg.current?.naturalWidth * scale}
+              height={resultImg.current?.naturalHeight * scale}
             >
               {data.map((block, index) => {
                 const coordidate = block.boundings.vertices
-                  .map((v) => `${v.x * ratio},${v.y * ratio}`)
+                  .map((v) => `${v.x * scale},${v.y * scale}`)
                   .join(' ');
                 return (
                   <polygon
