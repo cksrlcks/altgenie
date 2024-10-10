@@ -1,0 +1,19 @@
+.avatar {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.nav__status {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.nav__status-title {
+  color: #999;
+}
+.nav__status-count {
+  font-weight: 700;
+}

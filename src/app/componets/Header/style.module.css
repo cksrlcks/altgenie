@@ -1,0 +1,43 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 3.5rem;
+  margin-bottom: 4rem;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.nav__btn {
+  display: block;
+  border-radius: 4px;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.nav__btn:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #eee;
+  width: calc(100% + 1.8em);
+  height: 3.8rem;
+  border-radius: 0.8rem;
+  z-index: -1;
+  opacity: 0;
+}
+
+.nav__btn:hover:after {
+  opacity: 1;
+  transition: opacity 0.2s;
+}

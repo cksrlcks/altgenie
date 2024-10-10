@@ -2,15 +2,13 @@ import type { Metadata } from 'next';
 import './assets/css/reset.css';
 import './assets/css/globals.css';
 import styles from './layout.module.css';
-import Link from 'next/link';
 import Image from 'next/image';
+import Header from './componets/Header';
 
 export const metadata: Metadata = {
   title: 'Altgenie',
   description: '대체택스트 생성기',
 };
-
-const isLogin = true;
 
 export default function RootLayout({
   children,
@@ -21,47 +19,8 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <div className={styles.app}>
-          <header className={styles.header}>
-            <Link href="/">
-              <Image
-                src="/img/logo.svg"
-                width={139}
-                height={27}
-                alt="altgenie"
-              />
-            </Link>
-            <nav className={styles.nav}>
-              {!isLogin ? (
-                <Link href="/" className={styles['nav__btn']}>
-                  로그인
-                </Link>
-              ) : (
-                <>
-                  <div className={styles['nav__status']}>
-                    <span className={styles['nav__status-title']}>
-                      오늘 남은 횟수
-                    </span>
-                    <span className={styles['nav__status-count']}>5</span>
-                  </div>
+          <Header />
 
-                  <Link href="/" className={styles['nav__btn']}>
-                    이용내역
-                  </Link>
-                  <Link href="/" className={styles['nav__btn']}>
-                    로그아웃
-                  </Link>
-                  <div className={styles.avatar}>
-                    <Image
-                      src="/img/avatar.png"
-                      width={32}
-                      height={32}
-                      alt="avatar"
-                    />
-                  </div>
-                </>
-              )}
-            </nav>
-          </header>
           <section className={styles.section}>
             <div className={styles['section__header']}>
               <div className={styles['section__header-info']}>
