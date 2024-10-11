@@ -3,34 +3,35 @@ import Image from 'next/image';
 import styles from './style.module.css';
 import Profile from '../Profile';
 
-type TempSession = {
-  user: {
-    name: string;
-    email: string;
-    image: string;
-  };
-  expire: Date;
-};
+// type TempSession = {
+//   user: {
+//     name: string;
+//     email: string;
+//     image: string;
+//   };
+//   expire: Date;
+// };
 
-const fakeUserData: TempSession = {
-  user: {
-    name: '김찬기',
-    email: 'chanki.kim89@gmail.com',
-    image:
-      'https://lh3.googleusercontent.com/ogw/AF2bZyj30FakUrEz6-weBgdwjFZv_WXjNHS61zeot0MYniWZC9rw=s64-c-mo',
-  },
-  expire: new Date(),
-};
+// const fakeUserData: TempSession = {
+//   user: {
+//     name: '김찬기',
+//     email: 'chanki.kim89@gmail.com',
+//     image:
+//       'https://lh3.googleusercontent.com/ogw/AF2bZyj30FakUrEz6-weBgdwjFZv_WXjNHS61zeot0MYniWZC9rw=s64-c-mo',
+//   },
+//   expire: new Date(),
+// };
 
 export default function Header() {
-  const session = fakeUserData;
+  //const session = fakeUserData;
 
   return (
     <header className={styles.header}>
       <Link href="/">
         <Image src="/img/logo.svg" width={139} height={27} alt="altgenie" />
       </Link>
-      <nav className={styles.nav}>
+      <div>로그인 기능 개발 예정 (하루 사용량 제한하기)</div>
+      {/* <nav className={styles.nav}>
         {!session.user ? (
           <button className={styles['nav__btn']}>로그인</button>
         ) : (
@@ -44,7 +45,7 @@ export default function Header() {
             </button>
           </>
         )}
-      </nav>
+      </nav> */}
     </header>
   );
 }
