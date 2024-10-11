@@ -8,6 +8,7 @@ interface SectionProps {
   button?: {
     icon?: ReactNode;
     title: string;
+    onClick?: () => void;
   };
   children?: ReactNode;
 }
@@ -26,7 +27,11 @@ export default function Section({
           {desc && <div className={styles['section__header-desc']}>{desc}</div>}
         </div>
         {button && (
-          <button type="button" className={styles['section__header-btn']}>
+          <button
+            type="button"
+            className={styles['section__header-btn']}
+            onClick={button.onClick}
+          >
             {button.icon}
             {button.title}
           </button>
