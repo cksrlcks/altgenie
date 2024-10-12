@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './style.module.css';
 import Profile from '../Profile';
+import { handleReset } from '@/utils/reset';
 
 // type TempSession = {
 //   user: {
@@ -27,9 +28,9 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <Link href="/">
+      <h1 className={styles.logo}>
         <Image src="/img/logo.svg" width={139} height={27} alt="altgenie" />
-      </Link>
+      </h1>
       {/* <div>로그인 기능 개발 예정 (하루 사용량 제한하기)</div> */}
       {/* <nav className={styles.nav}>
         {!session.user ? (
