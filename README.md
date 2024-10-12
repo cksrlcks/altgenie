@@ -11,6 +11,7 @@
 - 사용자별 일일 사용 횟수 제한 설정
 - 관리자 화면에서 사용자별 횟수제한 리셋 가능
 - 관리자 화면에서 전체 사용량을 확인 가능
+- vercel 배포
 
 ### 현재 실행모습
-[altgenie.webm](https://github.com/user-attachments/assets/efebd88a-8160-4e59-9806-b1a7a8899c9f)
+[altgenie.webm](https://github.com/user-attachments/assets/f82c9fe8-2541-43d8-a1f0-a20b356a3d0c)
