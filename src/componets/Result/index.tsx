@@ -10,6 +10,7 @@ interface ResultProps {
 }
 
 export default function Result({ result }: ResultProps) {
+  const [selected, setSelected] = useState<number | null>(null);
   const [blocks, setBlocks] = useState(
     result.blocks.map((block) => block.text),
   );
@@ -58,6 +59,14 @@ export default function Result({ result }: ResultProps) {
   function handleChange(e: FormEvent<HTMLDivElement>, index: number) {
     const text = e.currentTarget.innerText;
     setBlocks((prev) => prev.map((t, idx) => (idx === index ? text : t)));
+  }
+
+  function handleFocus(index: number) {
+    setSelected(index);
+  }
+
+  function handleBlur() {
+    setSelected(null);
   }
 
   function handleCopy() {
@@ -112,6 +121,8 @@ export default function Result({ result }: ResultProps) {
               suppressContentEditableWarning
               className={styles['result-block']}
               onInput={(e) => handleChange(e, index)}
+              onFocus={(e) => handleFocus(index)}
+              onBlur={handleBlur}
             >
               {block.text}
             </div>
@@ -135,7 +146,16 @@ export default function Result({ result }: ResultProps) {
           onClick: handleCopy,
         }}
       >
-        <div className={styles['result-txt']}>{resultText}</div>
+        <div className={styles['result-txt']}>
+          {blocks.map((t, index) => (
+            <em
+              key={index}
+              className={`${styles.txt} ${selected === index ? styles.active : ''}`}
+            >
+              {t}
+            </em>
+          ))}
+        </div>
       </Section>
     </>
   );
