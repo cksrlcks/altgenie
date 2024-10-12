@@ -2,11 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import vision from '@google-cloud/vision';
 import mockData from './data.json';
 import { google } from '@google-cloud/vision/build/protos/protos';
-import { OcrApiResponse } from '@/types/ocr';
 
-function extractOCRData(
-  result: OcrApiResponse | google.cloud.vision.v1.IAnnotateImageResponse,
-) {
+function extractOCRData(result: google.cloud.vision.v1.IAnnotateImageResponse) {
   const blocks = result.fullTextAnnotation?.pages?.[0].blocks;
   return blocks?.map((block) => {
     return {
@@ -40,7 +37,9 @@ export async function POST(req: NextRequest) {
   const mimeType = file.type || 'application/octet-stream';
 
   if (process.env.NEXT_PUBLIC_ENV === 'development') {
-    const data = extractOCRData(mockData);
+    const data = extractOCRData(
+      mockData as google.cloud.vision.v1.IAnnotateImageResponse,
+    );
     if (!data) {
       return NextResponse.json(
         { error: '검출된 텍스트가 없습니다.' },
