@@ -30,7 +30,7 @@ export default function Header() {
       <Link href="/">
         <Image src="/img/logo.svg" width={139} height={27} alt="altgenie" />
       </Link>
-      <div>로그인 기능 개발 예정 (하루 사용량 제한하기)</div>
+      {/* <div>로그인 기능 개발 예정 (하루 사용량 제한하기)</div> */}
       {/* <nav className={styles.nav}>
         {!session.user ? (
           <button className={styles['nav__btn']}>로그인</button>
