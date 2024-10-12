@@ -1,8 +1,5 @@
-import Link from 'next/link';
 import Image from 'next/image';
 import styles from './style.module.css';
-import Profile from '../Profile';
-import { handleReset } from '@/utils/reset';
 
 // type TempSession = {
 //   user: {
