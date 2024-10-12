@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Section from '../common/Section';
 import styles from './style.module.css';
 import { OcrResult } from '@/types/ocr';
+import { Button, ButtonWithWrapper } from '../common/Button';
 
 interface ResultProps {
   result: OcrResult;
@@ -18,6 +19,7 @@ export default function Result({ result }: ResultProps) {
     w: 1,
     h: 1,
   });
+
   const resultImg = useRef<HTMLImageElement>(null);
   const imgContainer = useRef<HTMLDivElement>(null);
   const scale = resultImg.current ? resultImg.current.naturalWidth / size.w : 1;
@@ -72,6 +74,15 @@ export default function Result({ result }: ResultProps) {
   function handleCopy() {
     navigator.clipboard.writeText(resultText);
     alert('클립보드에 복사했습니다.');
+  }
+
+  function handleReset() {
+    const confirm = window.confirm(
+      '작업된 내용이 초기화 될 수 있습니다. 정말 처음으로 돌아가시겠습니까?',
+    );
+    if (!confirm) return;
+
+    window.location.reload();
   }
 
   return (
@@ -157,6 +168,11 @@ export default function Result({ result }: ResultProps) {
           ))}
         </div>
       </Section>
+      <ButtonWithWrapper>
+        <Button type="button" onClick={handleReset}>
+          처음으로 돌아가기
+        </Button>
+      </ButtonWithWrapper>
     </>
   );
 }
