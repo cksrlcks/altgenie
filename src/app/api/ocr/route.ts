@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fakeData from './data.json';
+import vision from '@google-cloud/vision';
 
 export const config = {
   api: {
@@ -24,18 +24,37 @@ export async function POST(req: NextRequest) {
   const base64Image = buffer.toString('base64');
   const mimeType = file.type || 'application/octet-stream';
 
-  const data = fakeData.fullTextAnnotation.pages[0].blocks.map((block) => {
+  const client = new vision.ImageAnnotatorClient({
+    keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+  });
+  const [result] = await client.documentTextDetection({
+    image: {
+      content: base64Image, // base64 인코딩된 이미지
+    },
+  });
+
+  const blocks = result.fullTextAnnotation?.pages?.[0].blocks;
+  if (!blocks) {
+    return NextResponse.json(
+      { error: '검출된 텍스트가 없습니다.' },
+      { status: 500 },
+    );
+  }
+
+  //TODO : 데이터가 제대로 없으면 응답을 다르게 보내기
+  const data = blocks.map((block) => {
     return {
-      boundings: block.boundingBox.vertices,
+      boundings: block.boundingBox?.vertices,
       text: block.paragraphs
-        .map((p) => {
+        ?.map((p) => {
           return p.words
-            .map((w) => w.symbols.map((s) => s.text).join(''))
+            ?.map((w) => w.symbols?.map((s) => s.text).join(''))
             .join('');
         })
         .join(''),
     };
   });
+
   return NextResponse.json({
     img: { type: mimeType, base64: base64Image },
     blocks: data,

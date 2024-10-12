@@ -109,7 +109,7 @@ export default function Result({ result }: ResultProps) {
                     points={coordidate}
                     style={{
                       fill: 'transparent',
-                      stroke: 'lightgreen',
+                      stroke: selected === index ? 'red' : 'lightgreen',
                       strokeWidth: 2,
                     }}
                   />
