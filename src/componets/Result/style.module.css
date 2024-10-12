@@ -1,9 +1,24 @@
+.result-header {
+  display: flex;
+  gap: 4rem;
+}
+.result-header__preview {
+  flex: 0 0 40%;
+}
+.result-header__detail {
+  flex: 0 0 60%;
+}
 .result-blocks {
+  background: #f8f8f8;
+  padding: 2em;
+  border-radius: 1.6rem;
 }
 .result-block {
   width: 100%;
   padding: 0.8em;
-  border: 2px solid #000;
+  border: 2px solid #ddd;
+  background: #fff;
+  border-radius: 1rem;
 }
 .result-block + .result-block {
   margin-top: 0.4em;

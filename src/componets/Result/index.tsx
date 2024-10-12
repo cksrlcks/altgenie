@@ -85,60 +85,69 @@ export default function Result({ result }: ResultProps) {
 
   return (
     <>
-      <Section title="이미지 분석 결과">
-        <div className={styles['result-img']} ref={imgContainer}>
-          <img
-            src={`data:${result.img.type};base64,${result.img.base64}`}
-            alt={resultText}
-            ref={resultImg}
-            onLoad={getSize}
-          />
-          {resultImg.current && (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width={size.w}
-              height={size.h}
-            >
-              {result.blocks.map((block, index) => {
-                const coordidate = block.boundings
-                  .map((v) => `${v.x / scale},${v.y / scale}`)
-                  .join(' ');
-                return (
-                  <polygon
-                    key={index}
-                    points={coordidate}
-                    style={{
-                      fill: 'transparent',
-                      stroke: selected === index ? 'red' : 'lightgreen',
-                      strokeWidth: 2,
-                    }}
-                  />
-                );
-              })}
-            </svg>
-          )}
-        </div>
-      </Section>
-      <Section
-        title="상세하게 수정하기"
-        desc="문자가 감지된 구역에서 추출된 내용을 수정 할 수 있습니다."
-      >
-        <div className={styles['result-blocks']}>
-          {result.blocks.map((block, index) => (
-            <div
-              key={index}
-              contentEditable
-              suppressContentEditableWarning
-              className={styles['result-block']}
-              onInput={(e) => handleChange(e, index)}
-              onFocus={() => handleFocus(index)}
-              onBlur={handleBlur}
-            >
-              {block.text}
+      <div className={styles['result-header']}>
+        <div className={styles['result-header__preview']}>
+          <Section
+            title="이미지 분석 결과"
+            desc="이미지에 감지된 텍스트 영역입니다."
+          >
+            <div className={styles['result-img']} ref={imgContainer}>
+              <img
+                src={`data:${result.img.type};base64,${result.img.base64}`}
+                alt={resultText}
+                ref={resultImg}
+                onLoad={getSize}
+              />
+              {resultImg.current && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={size.w}
+                  height={size.h}
+                >
+                  {result.blocks.map((block, index) => {
+                    const coordidate = block.boundings
+                      .map((v) => `${v.x / scale},${v.y / scale}`)
+                      .join(' ');
+                    return (
+                      <polygon
+                        key={index}
+                        points={coordidate}
+                        style={{
+                          fill: 'transparent',
+                          stroke: selected === index ? 'red' : 'lightgreen',
+                          strokeWidth: 2,
+                        }}
+                      />
+                    );
+                  })}
+                </svg>
+              )}
             </div>
-          ))}
+          </Section>
         </div>
-      </Section>
+        <div className={styles['result-header__detail']}>
+          <Section
+            title="상세하게 수정하기"
+            desc="문자가 감지된 구역에서 추출된 내용을 수정 할 수 있습니다."
+          >
+            <div className={styles['result-blocks']}>
+              {result.blocks.map((block, index) => (
+                <div
+                  key={index}
+                  contentEditable
+                  suppressContentEditableWarning
+                  className={styles['result-block']}
+                  onInput={(e) => handleChange(e, index)}
+                  onFocus={() => handleFocus(index)}
+                  onBlur={handleBlur}
+                >
+                  {block.text}
+                </div>
+              ))}
+            </div>
+          </Section>
+        </div>
+      </div>
       <Section
         title="생성된 대체 텍스트"
         desc="google vision OCR을 통해 추출된 텍스트를 기반으로 작성된

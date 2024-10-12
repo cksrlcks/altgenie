@@ -129,6 +129,11 @@ table {
 }
 
 /* 추가 */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
 /* a */
 a {
   color: inherit;
