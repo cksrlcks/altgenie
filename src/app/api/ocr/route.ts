@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       Buffer.from(apiKeyBase64, 'base64').toString('utf-8'),
     );
     const client = new vision.ImageAnnotatorClient({
-      keyFilename: apiKey,
+      credentials: apiKey,
     });
     const [result] = await client.documentTextDetection({
       image: {
