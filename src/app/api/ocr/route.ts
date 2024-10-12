@@ -83,7 +83,6 @@ export async function POST(req: NextRequest) {
         { status: 500 },
       );
     }
-
     console.log('실제 api');
     return NextResponse.json({
       img: { type: mimeType, base64: base64Image },

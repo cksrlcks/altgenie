@@ -15,9 +15,13 @@ export default function Home() {
       method: 'POST',
       body: formData,
     });
-    const data = await response.json();
     setLoading(false);
-    setReult(data);
+    if (response.ok) {
+      const data = await response.json();
+      setReult(data);
+    } else {
+      alert('해당 이미지에 텍스트를 추출 할 수 없었습니다.');
+    }
   }
   return (
     <>
