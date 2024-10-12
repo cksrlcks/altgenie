@@ -4,12 +4,6 @@ import mockData from './data.json';
 import { google } from '@google-cloud/vision/build/protos/protos';
 import { OcrApiResponse } from '@/types/ocr';
 
-export const config = {
-  api: {
-    bodyParser: false, // multipart/form-data처리를 위해 bodyParser 비활성화
-  },
-};
-
 function extractOCRData(
   result: OcrApiResponse | google.cloud.vision.v1.IAnnotateImageResponse,
 ) {
