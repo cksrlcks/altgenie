@@ -66,6 +66,12 @@ export default function Upload({ onSubmit, loading }: UploadProps) {
     e.preventDefault();
     setIsOver(true);
   }
+
+  function handleDragLeave(e: DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsOver(false);
+  }
+
   function handleDrop(e: DragEvent<HTMLDivElement>) {
     e.preventDefault();
     setIsOver(false);
@@ -85,6 +91,7 @@ export default function Upload({ onSubmit, loading }: UploadProps) {
         <form onSubmit={handleSubmit}>
           <div
             onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             className={styles['upload__container']}
           >
