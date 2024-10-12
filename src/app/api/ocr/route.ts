@@ -55,8 +55,20 @@ export async function POST(req: NextRequest) {
     });
   } else {
     //real api(테스트할때는 목업데이터 이용하기)
+
+    //배포문제때문에 base64인코딩된 키 사용
+    const apiKeyBase64 = process.env.SERVICE_ACCOUNT_KEY_BASE64;
+    if (!apiKeyBase64) {
+      return NextResponse.json(
+        { error: 'api요청을 실패했습니다.' },
+        { status: 500 },
+      );
+    }
+    const apiKey = JSON.parse(
+      Buffer.from(apiKeyBase64, 'base64').toString('utf-8'),
+    );
     const client = new vision.ImageAnnotatorClient({
-      keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      keyFilename: apiKey,
     });
     const [result] = await client.documentTextDetection({
       image: {
