@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, DragEvent, FormEvent, useState } from 'react';
 import { Button, ButtonWithWrapper } from '../common/Button';
 import Section from '../common/Section';
 import styles from './style.module.css';
@@ -8,12 +8,23 @@ interface UploadProps {
 }
 
 export default function Upload({ onSubmit }: UploadProps) {
-  const [file, setFile] = useState<File | null>(null);
-  const inputFile = useRef(null);
+  const [file, setFile] = useState<File | undefined>(undefined);
+  const [isOver, setIsOver] = useState(false);
 
-  function handleUpload(e: ChangeEvent<HTMLInputElement>) {
+  //google vision api : json limit size < 10 mb
+  //base64로 인코딩되면 약 37퍼센트 더 커진다고 함
+  //약 7mb 이하로 이미지를 받아야함 (안전하게 5mb로 설정)
+  const limitSize = 5;
+
+  function handleFile(e: ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
-    setFile(e.target.files[0]);
+
+    const file = e.target.files[0];
+    if (isValidSize(file, limitSize) && isImgType(file)) {
+      setFile(e.target.files[0]);
+    }
+
+    e.target.value = '';
   }
 
   function handleSubmit(e: FormEvent) {
@@ -24,20 +35,77 @@ export default function Upload({ onSubmit }: UploadProps) {
 
     onSubmit(formData);
   }
+
+  function isImgType(file: File) {
+    const regex = /(gif|png|jpg|jpeg)$/i;
+    if (!regex.exec(file.type)) {
+      alert('이미지파일만 업로드가 가능합니다.');
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function isValidSize(file: File, limit: number) {
+    const size = file.size;
+    const limitSize = limit * 1024 * 1024;
+    if (size > limitSize) {
+      alert(`이미지는 ${limit}MB 이하로 업로드 해주세요.`);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function handleReset() {
+    setFile(undefined);
+  }
+
+  function handleDragOver(e: DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsOver(true);
+  }
+  function handleDrop(e: DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsOver(false);
+
+    const files = e.dataTransfer.files;
+    if (!files.length) return;
+    const file = files[0];
+
+    if (isValidSize(file, limitSize) && isImgType(file)) {
+      setFile(file);
+    }
+  }
+
   return (
     <Section title="이미지 업로드">
       <form onSubmit={handleSubmit}>
-        <div className={styles['upload']}>
+        <div
+          className={styles['upload']}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+        >
+          {file && (
+            <button
+              type="button"
+              onClick={handleReset}
+              className={styles['upload__reset-btn']}
+            >
+              이미지 삭제
+            </button>
+          )}
+
           <div
-            className={`${styles['upload__container']} ${file ? styles['active'] : ''}`}
+            className={`${styles['upload__container']} ${file ? styles['upload__container--active'] : ''} ${isOver ? styles['upload__container--over'] : ''}`}
           >
             {!file ? (
               <label htmlFor="file" className={styles['upload__placeholder']}>
                 <input
                   id="file"
                   type="file"
-                  onChange={handleUpload}
-                  ref={inputFile}
+                  value={file}
+                  onChange={handleFile}
                 />
                 <div className={styles['upload__placeholder-title']}>
                   이곳에 드래그하여 이미지를 올려주시거나, 클릭해서 파일을
@@ -53,7 +121,9 @@ export default function Upload({ onSubmit }: UploadProps) {
           </div>
         </div>
         <ButtonWithWrapper>
-          <Button type="submit">대체택스트 만들기</Button>
+          <Button type="submit" disabled={!file}>
+            대체택스트 만들기
+          </Button>
         </ButtonWithWrapper>
       </form>
     </Section>
