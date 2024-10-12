@@ -10,3 +10,27 @@ body {
   letter-spacing: -0.07em;
   line-height: 1.2;
 }
+
+@media screen and (max-width: 1440px) {
+  html {
+    font-size: 60%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  html {
+    font-size: 57.5%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 55%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  html {
+    font-size: 50%;
+  }
+}
