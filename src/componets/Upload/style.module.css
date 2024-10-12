@@ -1,17 +1,23 @@
 .upload {
-  position: relative;
+  max-width: 70rem;
+  margin: 0 auto;
 }
 .upload__container {
+  position: relative;
+}
+.upload__drag-zone--over {
+  border: 2px solid #000;
+}
+
+.upload__drag-zone {
   background: #f8f8f8;
   border: 1px dashed #ddd;
   border-radius: 1.6rem;
   height: 46.8rem;
-}
-.upload__container--over {
-  border: 2px solid #000;
+  cursor: pointer;
 }
 
-.upload__containe--active {
+.upload__drag-zone--active {
   border: 1px solid #ddd;
 }
 
@@ -32,6 +38,7 @@
   height: 100%;
   text-align: center;
   padding: 1em;
+  cursor: pointer;
 }
 
 .upload__placeholder-title {

@@ -24,7 +24,7 @@ export default function Home() {
       {loading && <Loading ment="처리중입니다..." />}
 
       {!result ? (
-        <Upload onSubmit={handleSubmit} />
+        <Upload onSubmit={handleSubmit} loading={loading} />
       ) : (
         <Result result={result} />
       )}
