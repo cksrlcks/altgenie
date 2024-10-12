@@ -15,6 +15,7 @@
   border-radius: 1.6rem;
   height: 46.8rem;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .upload__drag-zone--active {
