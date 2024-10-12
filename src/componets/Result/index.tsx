@@ -49,14 +49,12 @@ export default function Result({ result }: ResultProps) {
   }
 
   useEffect(() => {
-    getSize();
-
     window.addEventListener('resize', getSize);
 
     return () => {
       window.removeEventListener('resize', getSize);
     };
-  }, [result.img]);
+  }, []);
 
   function handleChange(e: FormEvent<HTMLDivElement>, index: number) {
     const text = e.currentTarget.innerText;
@@ -93,6 +91,7 @@ export default function Result({ result }: ResultProps) {
             src={`data:${result.img.type};base64,${result.img.base64}`}
             alt={resultText}
             ref={resultImg}
+            onLoad={getSize}
           />
           {resultImg.current && (
             <svg
@@ -132,7 +131,7 @@ export default function Result({ result }: ResultProps) {
               suppressContentEditableWarning
               className={styles['result-block']}
               onInput={(e) => handleChange(e, index)}
-              onFocus={(e) => handleFocus(index)}
+              onFocus={() => handleFocus(index)}
               onBlur={handleBlur}
             >
               {block.text}
