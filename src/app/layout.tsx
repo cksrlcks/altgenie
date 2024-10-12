@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import './assets/css/reset.css';
-import './assets/css/globals.css';
+import '../assets/css/reset.css';
+import '../assets/css/globals.css';
 import styles from './layout.module.css';
-import Header from './componets/Header';
+import Header from '../componets/Header';
 
 export const metadata: Metadata = {
   title: 'Altgenie',

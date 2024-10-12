@@ -3,11 +3,16 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Section from '../common/Section';
 import styles from './style.module.css';
+import { OcrResult } from '@/types/ocr';
 
-//임시데이터
-import data from './dataNarrow.json';
+interface ResultProps {
+  result: OcrResult;
+}
 
-export default function Result() {
+export default function Result({ result }: ResultProps) {
+  const [blocks, setBlocks] = useState(
+    result.blocks.map((block) => block.text),
+  );
   const [size, setSize] = useState<{ w: number; h: number }>({
     w: 1,
     h: 1,
@@ -15,7 +20,6 @@ export default function Result() {
   const resultImg = useRef<HTMLImageElement>(null);
   const imgContainer = useRef<HTMLDivElement>(null);
   const scale = resultImg.current ? resultImg.current.naturalWidth / size.w : 1;
-  const [blocks, setBlocks] = useState(data.map((block) => block.text));
   const resultText = blocks.join(', ');
 
   function getSize() {
@@ -49,7 +53,7 @@ export default function Result() {
     return () => {
       window.removeEventListener('resize', getSize);
     };
-  }, []);
+  }, [result.img]);
 
   function handleChange(e: FormEvent<HTMLDivElement>, index: number) {
     const text = e.currentTarget.innerText;
@@ -65,15 +69,19 @@ export default function Result() {
     <>
       <Section title="이미지 분석 결과">
         <div className={styles['result-img']} ref={imgContainer}>
-          <img src="/img/testNarrow.png" alt="dd" ref={resultImg} />
+          <img
+            src={`data:${result.img.type};base64,${result.img.base64}`}
+            alt={resultText}
+            ref={resultImg}
+          />
           {resultImg.current && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width={size.w}
               height={size.h}
             >
-              {data.map((block, index) => {
-                const coordidate = block.boundings.vertices
+              {result.blocks.map((block, index) => {
+                const coordidate = block.boundings
                   .map((v) => `${v.x / scale},${v.y / scale}`)
                   .join(' ');
                 return (
@@ -97,7 +105,7 @@ export default function Result() {
         desc="문자가 감지된 구역에서 추출된 내용을 수정 할 수 있습니다."
       >
         <div className={styles['result-blocks']}>
-          {data.map((block, index) => (
+          {result.blocks.map((block, index) => (
             <div
               key={index}
               contentEditable
