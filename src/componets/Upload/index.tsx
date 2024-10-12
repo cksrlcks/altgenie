@@ -121,7 +121,7 @@ export default function Upload({ onSubmit, loading }: UploadProps) {
                     첨부해주세요
                   </div>
                   <div className={styles['upload__placeholder-desc']}>
-                    최대 5MB 이하. 최대 1000 px까지만 업로드 가능합니다.
+                    최대 5MB 이하의 이미지만 업로드 가능합니다.
                   </div>
                 </label>
               ) : (
