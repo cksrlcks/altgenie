@@ -25,6 +25,19 @@ body {
   line-height: 1.2;
 }
 
+.a11y {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  top: -9999em;
+  left: -9999em;
+  display: block;
+  text-indent: -9999em;
+  font-size: 0px;
+  line-height: 0;
+}
+
 @media screen and (max-width: 1440px) {
   html {
     font-size: 60%;

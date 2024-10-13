@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@google-cloud/vision": "^4.3.2",
+    "@types/sortablejs": "^1.15.8",
     "next": "14.2.14",
     "react": "^18",
     "react-dom": "^18",
-    "react-lottie": "^1.2.4"
+    "react-lottie": "^1.2.4",
+    "react-sortablejs": "^6.1.4",
+    "sortablejs": "^1.15.3"
   },
   "devDependencies": {
     "@types/node": "^20",

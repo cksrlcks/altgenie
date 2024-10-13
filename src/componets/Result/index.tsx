@@ -5,6 +5,7 @@ import Section from '../common/Section';
 import styles from './style.module.css';
 import { OcrResult } from '@/types/ocr';
 import { Button, ButtonWithWrapper } from '../common/Button';
+import { ReactSortable } from 'react-sortablejs';
 
 interface ResultProps {
   result: OcrResult;
@@ -13,7 +14,7 @@ interface ResultProps {
 export default function Result({ result }: ResultProps) {
   const [selected, setSelected] = useState<number | null>(null);
   const [blocks, setBlocks] = useState(
-    result.blocks.map((block) => block.text),
+    result.blocks.map((block, index) => ({ id: index, text: block.text })),
   );
   const [size, setSize] = useState<{ w: number; h: number }>({
     w: 1,
@@ -23,7 +24,7 @@ export default function Result({ result }: ResultProps) {
   const resultImg = useRef<HTMLImageElement>(null);
   const imgContainer = useRef<HTMLDivElement>(null);
   const scale = resultImg.current ? resultImg.current.naturalWidth / size.w : 1;
-  const resultText = blocks.join(', ');
+  const resultText = blocks.map((b) => b.text).join(', ');
 
   function getSize() {
     if (!imgContainer.current || !resultImg.current) return;
@@ -56,9 +57,11 @@ export default function Result({ result }: ResultProps) {
     };
   }, []);
 
-  function handleChange(e: FormEvent<HTMLDivElement>, index: number) {
+  function handleChange(e: FormEvent<HTMLDivElement>, id: number) {
     const text = e.currentTarget.innerText;
-    setBlocks((prev) => prev.map((t, idx) => (idx === index ? text : t)));
+    setBlocks((prev) =>
+      prev.map((b, idx) => (idx === id ? { ...b, text } : b)),
+    );
   }
 
   function handleFocus(index: number) {
@@ -130,21 +133,37 @@ export default function Result({ result }: ResultProps) {
             title="상세하게 수정하기"
             desc="문자가 감지된 구역에서 추출된 내용을 수정 할 수 있습니다."
           >
-            <div className={styles['result-blocks']}>
-              {result.blocks.map((block, index) => (
-                <div
-                  key={index}
-                  contentEditable
-                  suppressContentEditableWarning
-                  className={styles['result-block']}
-                  onInput={(e) => handleChange(e, index)}
-                  onFocus={() => handleFocus(index)}
-                  onBlur={handleBlur}
-                >
-                  {block.text}
-                </div>
-              ))}
-            </div>
+            <ul className={styles['result-blocks']}>
+              <ReactSortable
+                list={blocks}
+                setList={setBlocks}
+                handle=".drag-handle"
+                animation={200}
+              >
+                {blocks.map((block) => (
+                  <li
+                    key={block.id}
+                    className={`${styles['result-block']} ${selected === block.id ? styles['result-block--active'] : ''}`}
+                  >
+                    <div
+                      className={`drag-handle ${styles['result-block__handle']}`}
+                    >
+                      <span className="a11y">드래그 핸들</span>
+                    </div>
+                    <div
+                      contentEditable
+                      suppressContentEditableWarning
+                      className={styles['result-block__content']}
+                      onInput={(e) => handleChange(e, block.id)}
+                      onFocus={() => handleFocus(block.id)}
+                      onBlur={handleBlur}
+                    >
+                      {block.text}
+                    </div>
+                  </li>
+                ))}
+              </ReactSortable>
+            </ul>
           </Section>
         </div>
       </div>
@@ -166,12 +185,12 @@ export default function Result({ result }: ResultProps) {
         }}
       >
         <div className={styles['result-txt']}>
-          {blocks.map((t, index) => (
+          {blocks.map((block) => (
             <em
-              key={index}
-              className={`${styles.txt} ${selected === index ? styles.active : ''}`}
+              key={block.id}
+              className={`${styles.txt} ${selected === block.id ? styles.active : ''}`}
             >
-              {t}
+              {block.text}
             </em>
           ))}
         </div>
