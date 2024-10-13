@@ -6,7 +6,13 @@ import Header from '../componets/Header';
 
 export const metadata: Metadata = {
   title: 'Altgenie',
-  description: '대체택스트 생성기',
+  description: '구글 vision api를 이용한 대체택스트 생성기',
+  openGraph: {
+    title: 'Altgenie',
+    description: '구글 vision api를 이용한 대체택스트 생성기',
+    url: 'https://altgenie.vercel.app/',
+    siteName: 'Altgenie',
+  },
 };
 
 export default function RootLayout({
