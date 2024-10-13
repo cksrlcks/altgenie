@@ -56,7 +56,7 @@
   background: #fff;
   border-radius: 1rem;
 }
-.result-block:focus {
+.result-block--active .result-block__content {
   outline-color: red;
 }
 .result-txt {
