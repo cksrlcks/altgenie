@@ -141,7 +141,10 @@ export default function Result({ result }: ResultProps) {
                 animation={200}
               >
                 {blocks.map((block) => (
-                  <li key={block.id} className={styles['result-block']}>
+                  <li
+                    key={block.id}
+                    className={`${styles['result-block']} ${selected === block.id ? styles['result-block--active'] : ''}`}
+                  >
                     <div
                       className={`drag-handle ${styles['result-block__handle']}`}
                     >
