@@ -15,18 +15,18 @@ export default function Home() {
       method: 'POST',
       body: formData,
     });
-    setLoading(false);
     if (response.ok) {
       const data = await response.json();
       setReult(data);
+      setLoading(false);
     } else {
+      setLoading(false);
       alert('해당 이미지에 텍스트를 추출 할 수 없었습니다.');
     }
   }
   return (
     <>
-      {loading && <Loading ment="처리중입니다..." />}
-
+      {loading && <Loading />}
       {!result ? (
         <Upload onSubmit={handleSubmit} loading={loading} />
       ) : (
