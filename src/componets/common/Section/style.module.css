@@ -3,7 +3,7 @@
 }
 
 .section__header {
-  margin-bottom: 1.4em;
+  margin-bottom: 1.8em;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -20,7 +20,7 @@
 
 .section__header-desc {
   color: #999;
-  margin-top: 1em;
+  margin-top: 0.6em;
 }
 
 .section__header-btn {
