@@ -154,7 +154,7 @@ export default function Result({ result }: ResultProps) {
                       contentEditable
                       suppressContentEditableWarning
                       className={styles['result-block__content']}
-                      onInput={(e) => handleChange(e, block.id)}
+                      onChange={(e) => handleChange(e, block.id)}
                       onFocus={() => handleFocus(block.id)}
                       onBlur={handleBlur}
                     >
