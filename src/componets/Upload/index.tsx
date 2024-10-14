@@ -2,27 +2,48 @@ import { ChangeEvent, DragEvent, FormEvent, useState } from 'react';
 import { Button, ButtonWithWrapper } from '../common/Button';
 import Section from '../common/Section';
 import styles from './style.module.css';
+import Image from 'next/image';
 
 interface UploadProps {
   onSubmit: (formData: FormData) => void;
   loading: boolean;
 }
 
+//google vision api : json limit size < 10 mb (base64로 인코딩되면 약 37퍼센트 더 커진다고 함)
+//약 7mb 이하로 이미지를 받아야함 (안전하게 5mb로 설정)
+const LIMIT_SIZE_MB = 5;
+const VALID_IMAGE_TYPES = /(gif|png|jpg|jpeg)$/i;
+
 export default function Upload({ onSubmit, loading }: UploadProps) {
   const [file, setFile] = useState<File | undefined>(undefined);
   const [isOver, setIsOver] = useState(false);
 
-  //google vision api : json limit size < 10 mb
-  //base64로 인코딩되면 약 37퍼센트 더 커진다고 함
-  //약 7mb 이하로 이미지를 받아야함 (안전하게 5mb로 설정)
-  const limitSize = 5;
+  function isValidType(file: File, typeRegex: RegExp) {
+    if (!typeRegex.exec(file.type)) {
+      alert('이미지파일만 업로드가 가능합니다.');
+      return false;
+    }
+    return true;
+  }
 
-  function handleFile(e: ChangeEvent<HTMLInputElement>) {
+  function isValidSize(file: File, limit: number) {
+    const limitSize = limit * 1024 * 1024;
+    if (file.size > limitSize) {
+      alert(`이미지는 ${limit}MB 이하로 업로드 해주세요.`);
+      return false;
+    }
+    return true;
+  }
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
 
     const file = e.target.files[0];
-    if (isValidSize(file, limitSize) && isImgType(file)) {
-      setFile(e.target.files[0]);
+    if (
+      isValidSize(file, LIMIT_SIZE_MB) &&
+      isValidType(file, VALID_IMAGE_TYPES)
+    ) {
+      setFile(file);
     }
 
     e.target.value = '';
@@ -33,29 +54,7 @@ export default function Upload({ onSubmit, loading }: UploadProps) {
     if (!file) return;
     const formData = new FormData();
     formData.append('file', file);
-
     onSubmit(formData);
-  }
-
-  function isImgType(file: File) {
-    const regex = /(gif|png|jpg|jpeg)$/i;
-    if (!regex.exec(file.type)) {
-      alert('이미지파일만 업로드가 가능합니다.');
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  function isValidSize(file: File, limit: number) {
-    const size = file.size;
-    const limitSize = limit * 1024 * 1024;
-    if (size > limitSize) {
-      alert(`이미지는 ${limit}MB 이하로 업로드 해주세요.`);
-      return false;
-    } else {
-      return true;
-    }
   }
 
   function handleReset() {
@@ -80,7 +79,10 @@ export default function Upload({ onSubmit, loading }: UploadProps) {
     if (!files.length) return;
     const file = files[0];
 
-    if (isValidSize(file, limitSize) && isImgType(file)) {
+    if (
+      isValidSize(file, LIMIT_SIZE_MB) &&
+      isValidType(file, VALID_IMAGE_TYPES)
+    ) {
       setFile(file);
     }
   }
@@ -90,21 +92,20 @@ export default function Upload({ onSubmit, loading }: UploadProps) {
       <Section title="이미지 업로드">
         <form onSubmit={handleSubmit}>
           <div
+            className={styles['upload__container']}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={styles['upload__container']}
           >
             {file && (
               <button
                 type="button"
-                onClick={handleReset}
                 className={styles['upload__reset-btn']}
+                onClick={handleReset}
               >
                 이미지 삭제
               </button>
             )}
-
             <div
               className={`${styles['upload__drag-zone']} ${file ? styles['upload__drag-zone--active'] : ''} ${isOver ? styles['upload__drag-zone--over'] : ''}`}
             >
@@ -114,7 +115,7 @@ export default function Upload({ onSubmit, loading }: UploadProps) {
                     id="file"
                     type="file"
                     value={file}
-                    onChange={handleFile}
+                    onChange={handleChange}
                   />
                   <div className={styles['upload__placeholder-title']}>
                     이곳에 드래그하여 이미지를 올려주시거나, 클릭해서 파일을
@@ -125,7 +126,7 @@ export default function Upload({ onSubmit, loading }: UploadProps) {
                   </div>
                 </label>
               ) : (
-                <img src={URL.createObjectURL(file)} alt="temp" />
+                <Image src={URL.createObjectURL(file)} alt="temp" fill />
               )}
             </div>
           </div>

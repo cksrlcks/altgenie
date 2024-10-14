@@ -13,6 +13,7 @@
   height: 46.8rem;
   cursor: pointer;
   overflow: hidden;
+  position: relative;
 }
 
 .upload__drag-zone--active {
