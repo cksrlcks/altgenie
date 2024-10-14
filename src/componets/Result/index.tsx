@@ -49,19 +49,74 @@ export default function Result({ result }: ResultProps) {
     }
   }
 
+  // contenteditable 외부 클릭 시 포커스 해제
+  function handleBlurContentEdtitable(e: MouseEvent) {
+    const clickedElement = e.target as HTMLElement;
+    if (
+      !clickedElement.closest('[contenteditable="true"]') &&
+      !clickedElement.closest('.drag-handle')
+    ) {
+      e.preventDefault();
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+    }
+  }
+
   useEffect(() => {
+    document.addEventListener('mousedown', handleBlurContentEdtitable);
     window.addEventListener('resize', getSize);
 
     return () => {
+      document.addEventListener('mousedown', handleBlurContentEdtitable);
       window.removeEventListener('resize', getSize);
     };
   }, []);
 
+  // 커서 위치 저장
+  const saveCursorPosition = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      return {
+        startContainer: range.startContainer,
+        startOffset: range.startOffset,
+      };
+    }
+    return null;
+  };
+
+  // 커서 위치 복원
+  const restoreCursorPosition = (
+    cursorPosition: {
+      startContainer: Node;
+      startOffset: number;
+    } | null,
+  ) => {
+    if (!cursorPosition) return;
+
+    const { startContainer, startOffset } = cursorPosition;
+    const selection = window.getSelection();
+    if (selection) {
+      const range = document.createRange();
+
+      if (
+        startContainer.textContent &&
+        startOffset <= startContainer.textContent.length
+      ) {
+        range.setStart(startContainer, startOffset);
+        range.collapse(true); // 커서를 시작 위치로 설정
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
+  };
+
   function handleChange(e: FormEvent<HTMLDivElement>, id: number) {
+    const cursorPosition = saveCursorPosition();
     const text = e.currentTarget.innerText;
-    setBlocks((prev) =>
-      prev.map((b, idx) => (idx === id ? { ...b, text } : b)),
-    );
+    setBlocks((prev) => prev.map((b) => (b.id === id ? { ...b, text } : b)));
+    setTimeout(() => restoreCursorPosition(cursorPosition), 0);
   }
 
   function handleFocus(index: number) {
@@ -154,7 +209,7 @@ export default function Result({ result }: ResultProps) {
                       contentEditable
                       suppressContentEditableWarning
                       className={styles['result-block__content']}
-                      onChange={(e) => handleChange(e, block.id)}
+                      onInput={(e) => handleChange(e, block.id)}
                       onFocus={() => handleFocus(block.id)}
                       onBlur={handleBlur}
                     >
