@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import '../assets/css/reset.css';
 import '../assets/css/globals.css';
 import styles from './layout.module.css';
@@ -15,13 +16,18 @@ export const metadata: Metadata = {
   },
 };
 
+const font = localFont({
+  src: '../assets/font/PretendardVariable.woff2',
+  display: 'swap',
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={font.className}>
       <body>
         <div className={styles.app}>
           <Header />
