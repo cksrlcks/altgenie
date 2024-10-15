@@ -1,8 +1,8 @@
 'use client';
 import { useState } from 'react';
-import Result from '../componets/Result';
-import Upload from '../componets/Upload';
-import Loading from '../componets/common/Loading';
+import Result from '../components/Result';
+import Upload from '../components/Upload';
+import Loading from '../components/common/Loading';
 import { OcrResult } from '../types/ocr';
 import styles from './page.module.css';
 
