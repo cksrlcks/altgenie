@@ -8,21 +8,29 @@ import styles from './page.module.css';
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
-  const [result, setReult] = useState<OcrResult | null>(null);
+  const [result, setResult] = useState<OcrResult | null>(null);
 
   async function handleSubmit(formData: FormData) {
-    setLoading(true);
-    const response = await fetch('/api/ocr/', {
-      method: 'POST',
-      body: formData,
-    });
-    if (response.ok) {
-      const data = await response.json();
-      setReult(data);
+    try {
+      setLoading(true);
+      const response: Response = await fetch('/api/ocr/', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        setResult(result);
+      } else {
+        alert(
+          result.error || '문제가 발생했습니다. 잠시후 다시 시도해 주세요.',
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      alert('요청에 실패했습니다.');
+    } finally {
       setLoading(false);
-    } else {
-      setLoading(false);
-      alert('해당 이미지에 텍스트를 추출 할 수 없었습니다.');
     }
   }
   return (
