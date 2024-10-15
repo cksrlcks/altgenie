@@ -1,8 +1,8 @@
 import { ChangeEvent, DragEvent, FormEvent, useState } from 'react';
 import { Button, ButtonWithWrapper } from '../common/Button';
-import Section from '../common/Section';
 import styles from './style.module.css';
 import Image from 'next/image';
+import Section from '../common/Section';
 
 interface UploadProps {
   onSubmit: (formData: FormData) => void;
@@ -88,8 +88,8 @@ export default function Upload({ onSubmit, loading }: UploadProps) {
   }
 
   return (
-    <div className={styles['upload']}>
-      <Section title="이미지 업로드">
+    <Section title="이미지 업로드">
+      <div className={styles['upload']}>
         <form onSubmit={handleSubmit}>
           <div
             className={styles['upload__container']}
@@ -136,7 +136,7 @@ export default function Upload({ onSubmit, loading }: UploadProps) {
             </Button>
           </ButtonWithWrapper>
         </form>
-      </Section>
-    </div>
+      </div>
+    </Section>
   );
 }
