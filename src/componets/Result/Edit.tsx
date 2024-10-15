@@ -1,47 +1,26 @@
 import Section from '../common/Section';
 import { ReactSortable } from 'react-sortablejs';
+import { Dispatch, FormEvent, SetStateAction } from 'react';
+import ContentEditor from './ContentEditor';
 import styles from './style.module.css';
-import { Dispatch, FormEvent, SetStateAction, useEffect } from 'react';
 
 interface EditProps {
   selected: number | null;
   blocks: { id: number; text: string }[];
   setBlocks: Dispatch<SetStateAction<{ id: number; text: string }[]>>;
-  handleChange: (e: FormEvent<HTMLDivElement>, id: number) => void;
-  handleFocus: (id: number) => void;
-  handleBlur: () => void;
+  onChange: (e: FormEvent<HTMLDivElement>, id: number) => void;
+  onFocus: (id: number) => void;
+  onBlur: () => void;
 }
 
 export default function Edit({
   selected,
   blocks,
   setBlocks,
-  handleChange,
-  handleFocus,
-  handleBlur,
+  onChange,
+  onFocus,
+  onBlur,
 }: EditProps) {
-  useEffect(() => {
-    document.addEventListener('mousedown', handleBlurContentEdtitable);
-
-    return () => {
-      document.addEventListener('mousedown', handleBlurContentEdtitable);
-    };
-  }, []);
-
-  function handleBlurContentEdtitable(e: MouseEvent) {
-    const clickedElement = e.target as HTMLElement;
-    if (
-      !clickedElement.closest('[contenteditable="true"]') &&
-      !clickedElement.closest('.drag-handle') &&
-      !clickedElement.closest('.result-zone')
-    ) {
-      e.preventDefault();
-      if (document.activeElement instanceof HTMLElement) {
-        document.activeElement.blur();
-      }
-    }
-  }
-
   return (
     <Section
       title="상세하게 수정하기"
@@ -62,16 +41,12 @@ export default function Edit({
               <div className={`drag-handle ${styles['result-block__handle']}`}>
                 <span className="a11y">드래그 핸들</span>
               </div>
-              <div
-                contentEditable
-                suppressContentEditableWarning
-                className={styles['result-block__content']}
-                onInput={(e) => handleChange(e, block.id)}
-                onFocus={() => handleFocus(block.id)}
-                onBlur={handleBlur}
-              >
-                {block.text}
-              </div>
+              <ContentEditor
+                block={block}
+                onChange={onChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+              />
             </li>
           ))}
         </ReactSortable>

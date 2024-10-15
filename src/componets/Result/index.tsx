@@ -1,9 +1,8 @@
 'use client';
-import { useState, FormEvent, useEffect } from 'react';
+import { useState, FormEvent } from 'react';
 import Preview from './Preview';
 import Edit from './Edit';
 import ResultText from './ResultText';
-import { useCursorPosition } from '@/app/hook/useCursorPosition';
 import { OcrResult } from '@/types/ocr';
 import styles from './style.module.css';
 
@@ -17,26 +16,16 @@ export default function Result({ result }: ResultProps) {
     result.blocks.map((block, index) => ({ id: index, text: block.text })),
   );
 
-  const { saveCursorPosition, restoreCursorPosition, resetCursor } =
-    useCursorPosition();
-
-  useEffect(() => {
-    restoreCursorPosition();
-  }, [blocks, restoreCursorPosition]);
-
   function handleChange(e: FormEvent<HTMLDivElement>, id: number) {
-    saveCursorPosition();
     const text = e.currentTarget.innerText;
     setBlocks((prev) => prev.map((b) => (b.id === id ? { ...b, text } : b)));
   }
 
   function handleFocus(id: number) {
-    resetCursor();
     setSelected(id);
   }
 
   function handleBlur() {
-    resetCursor();
     setSelected(null);
   }
 
@@ -51,9 +40,9 @@ export default function Result({ result }: ResultProps) {
             selected={selected}
             blocks={blocks}
             setBlocks={setBlocks}
-            handleChange={handleChange}
-            handleFocus={handleFocus}
-            handleBlur={handleBlur}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
           />
         </div>
       </div>
