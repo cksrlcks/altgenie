@@ -1,30 +1,31 @@
+import { useState } from 'react';
+
 export function useCursorPosition() {
+  const [cursorPosition, setCursorPosition] = useState<{
+    startContainer: Node;
+    startOffset: number;
+  } | null>(null);
+
   function saveCursorPosition() {
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
       const range = selection.getRangeAt(0);
-      return {
+      setCursorPosition({
         startContainer: range.startContainer,
         startOffset: range.startOffset,
-      };
+      });
+    } else {
+      setCursorPosition(null);
     }
-    return null;
   }
 
-  // 커서 위치 복원
-  function restoreCursorPosition(
-    cursorPosition: {
-      startContainer: Node;
-      startOffset: number;
-    } | null,
-  ) {
+  function restoreCursorPosition() {
     if (!cursorPosition) return;
 
     const { startContainer, startOffset } = cursorPosition;
     const selection = window.getSelection();
     if (selection) {
       const range = document.createRange();
-
       if (
         startContainer.textContent &&
         startOffset <= startContainer.textContent.length
@@ -37,5 +38,9 @@ export function useCursorPosition() {
     }
   }
 
-  return { saveCursorPosition, restoreCursorPosition };
+  function resetCursor() {
+    setCursorPosition(null);
+  }
+
+  return { saveCursorPosition, restoreCursorPosition, resetCursor };
 }

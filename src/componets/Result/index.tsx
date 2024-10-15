@@ -1,9 +1,9 @@
 'use client';
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 import Preview from './Preview';
 import Edit from './Edit';
 import ResultText from './ResultText';
-import { useCursorPosition } from '@/app/hook/cursor';
+import { useCursorPosition } from '@/app/hook/useCursorPosition';
 import { OcrResult } from '@/types/ocr';
 import styles from './style.module.css';
 
@@ -17,19 +17,26 @@ export default function Result({ result }: ResultProps) {
     result.blocks.map((block, index) => ({ id: index, text: block.text })),
   );
 
-  const { saveCursorPosition, restoreCursorPosition } = useCursorPosition();
+  const { saveCursorPosition, restoreCursorPosition, resetCursor } =
+    useCursorPosition();
+
+  useEffect(() => {
+    restoreCursorPosition();
+  }, [blocks, restoreCursorPosition]);
 
   function handleChange(e: FormEvent<HTMLDivElement>, id: number) {
-    const cursorPosition = saveCursorPosition();
+    saveCursorPosition();
     const text = e.currentTarget.innerText;
     setBlocks((prev) => prev.map((b) => (b.id === id ? { ...b, text } : b)));
-    setTimeout(() => restoreCursorPosition(cursorPosition), 0);
   }
+
   function handleFocus(id: number) {
+    resetCursor();
     setSelected(id);
   }
 
   function handleBlur() {
+    resetCursor();
     setSelected(null);
   }
 
