@@ -89,54 +89,52 @@ export default function Upload({ onSubmit, loading }: UploadProps) {
 
   return (
     <Section title="이미지 업로드">
-      <div className={styles['upload']}>
-        <form onSubmit={handleSubmit}>
-          <div
-            className={styles['upload__container']}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            {file && (
-              <button
-                type="button"
-                className={styles['upload__reset-btn']}
-                onClick={handleReset}
-              >
-                이미지 삭제
-              </button>
-            )}
-            <div
-              className={`${styles['upload__drag-zone']} ${file ? styles['upload__drag-zone--active'] : ''} ${isOver ? styles['upload__drag-zone--over'] : ''}`}
+      <form onSubmit={handleSubmit}>
+        <div
+          className={styles['upload__container']}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          {file && (
+            <button
+              type="button"
+              className={styles['upload__reset-btn']}
+              onClick={handleReset}
             >
-              {!file ? (
-                <label htmlFor="file" className={styles['upload__placeholder']}>
-                  <input
-                    id="file"
-                    type="file"
-                    value={file}
-                    onChange={handleChange}
-                  />
-                  <div className={styles['upload__placeholder-title']}>
-                    이곳에 드래그하여 이미지를 올려주시거나, 클릭해서 파일을
-                    첨부해주세요
-                  </div>
-                  <div className={styles['upload__placeholder-desc']}>
-                    최대 5MB 이하의 이미지만 업로드 가능합니다.
-                  </div>
-                </label>
-              ) : (
-                <Image src={URL.createObjectURL(file)} alt="temp" fill />
-              )}
-            </div>
+              이미지 삭제
+            </button>
+          )}
+          <div
+            className={`${styles['upload__drag-zone']} ${file ? styles['upload__drag-zone--active'] : ''} ${isOver ? styles['upload__drag-zone--over'] : ''}`}
+          >
+            {!file ? (
+              <label htmlFor="file" className={styles['upload__placeholder']}>
+                <input
+                  id="file"
+                  type="file"
+                  value={file}
+                  onChange={handleChange}
+                />
+                <div className={styles['upload__placeholder-title']}>
+                  이곳에 드래그하여 이미지를 올려주시거나, 클릭해서 파일을
+                  첨부해주세요
+                </div>
+                <div className={styles['upload__placeholder-desc']}>
+                  최대 5MB 이하의 이미지만 업로드 가능합니다.
+                </div>
+              </label>
+            ) : (
+              <Image src={URL.createObjectURL(file)} alt="temp" fill />
+            )}
           </div>
-          <ButtonWithWrapper>
-            <Button type="submit" disabled={!file}>
-              {!loading ? '대체택스트 만들기' : '이미지를 분석중입니다.'}
-            </Button>
-          </ButtonWithWrapper>
-        </form>
-      </div>
+        </div>
+        <ButtonWithWrapper>
+          <Button type="submit" disabled={!file}>
+            {!loading ? '대체택스트 만들기' : '이미지를 분석중입니다.'}
+          </Button>
+        </ButtonWithWrapper>
+      </form>
     </Section>
   );
 }

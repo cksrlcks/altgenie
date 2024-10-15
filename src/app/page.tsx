@@ -4,6 +4,7 @@ import Result from '../componets/Result';
 import Upload from '../componets/Upload';
 import Loading from '../componets/common/Loading';
 import { OcrResult } from '../types/ocr';
+import styles from './page.module.css';
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,9 @@ export default function Home() {
     <>
       {loading && <Loading />}
       {!result ? (
-        <Upload onSubmit={handleSubmit} loading={loading} />
+        <div className={styles.inner}>
+          <Upload onSubmit={handleSubmit} loading={loading} />
+        </div>
       ) : (
         <Result result={result} />
       )}
