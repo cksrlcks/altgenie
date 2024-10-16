@@ -15,5 +15,8 @@
 - 관리자 화면에서 전체 사용량을 확인 가능
   
 
+### URL
+https://altgenie.vercel.app/
+
 ### 현재 실행모습
 [altgenie_proto.webm](https://github.com/user-attachments/assets/b0f4df73-0751-405d-b469-b187606c1b8a)
