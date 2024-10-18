@@ -92,7 +92,7 @@
   z-index: 1;
 }
 
-@media screen and (max-width: 76.8rem) {
+@media screen and (max-width: 768px) {
   .result-header {
     flex-direction: column;
     gap: 0;
