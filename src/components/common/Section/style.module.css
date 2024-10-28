@@ -4,12 +4,11 @@
 
 .section__header {
   margin-bottom: 1.8em;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
 }
 
 .section__header-info {
+  display: flex;
+  flex-direction: column;
 }
 
 .section__header-title {
@@ -30,6 +29,8 @@
   gap: 1.2rem;
   font-weight: 700;
   position: relative;
+  flex: none;
+  margin-left: auto;
 }
 .section__header-btn:after {
   content: '';

@@ -31,37 +31,38 @@ export default function ResultText({ selected, blocks }: TextProps) {
 
   return (
     <>
-      <Section
-        title="생성된 대체 텍스트"
-        desc="google vision OCR을 통해 추출된 텍스트를 기반으로 작성된
-    내용입니다."
-        button={{
-          icon: (
+      <Section>
+        <Section.Header>
+          <Section.Title>생성된 대체 텍스트</Section.Title>
+          <Section.Description>
+            google vision OCR을 통해 추출된 텍스트를 기반으로 작성된 내용입니다.
+          </Section.Description>
+          <Section.Button onClick={handleCopy}>
             <Image
               src="/img/icon_copy.svg"
               width={20}
               height={20}
               alt="클립보드에 복사합니다."
-            />
-          ),
-          title: '복사하기',
-          onClick: handleCopy,
-        }}
-      >
-        <div className={`result-zone ${styles['result-txt']}`}>
-          {blocks.map((block) =>
-            selected === block.id ? (
-              <em
-                key={block.id}
-                className={`${styles.txt} ${selected === block.id ? styles.active : ''}`}
-              >
-                {block.text}
-              </em>
-            ) : (
-              <Fragment key={block.id}>{block.text}</Fragment>
-            ),
-          )}
-        </div>
+            />{' '}
+            복사하기
+          </Section.Button>
+        </Section.Header>
+        <Section.Body>
+          <div className={`result-zone ${styles['result-txt']}`}>
+            {blocks.map((block) =>
+              selected === block.id ? (
+                <em
+                  key={block.id}
+                  className={`${styles.txt} ${selected === block.id ? styles.active : ''}`}
+                >
+                  {block.text}
+                </em>
+              ) : (
+                <Fragment key={block.id}>{block.text}</Fragment>
+              ),
+            )}
+          </div>
+        </Section.Body>
       </Section>
       <ButtonWithWrapper>
         <Button type="button" onClick={handleReset}>

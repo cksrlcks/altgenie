@@ -20,15 +20,20 @@ export default function Upload({ onSubmit, loading }: UploadProps) {
   }
 
   return (
-    <Section title="이미지 업로드">
-      <form onSubmit={handleSubmit}>
-        <FileUpload file={file} setFile={setFile} />
-        <ButtonWithWrapper>
-          <Button type="submit" disabled={!file}>
-            {!loading ? '대체택스트 만들기' : '이미지를 분석중입니다.'}
-          </Button>
-        </ButtonWithWrapper>
-      </form>
+    <Section>
+      <Section.Header>
+        <Section.Title>이미지 업로드</Section.Title>
+      </Section.Header>
+      <Section.Body>
+        <form onSubmit={handleSubmit}>
+          <FileUpload file={file} setFile={setFile} />
+          <ButtonWithWrapper>
+            <Button type="submit" disabled={!file}>
+              {!loading ? '대체택스트 만들기' : '이미지를 분석중입니다.'}
+            </Button>
+          </ButtonWithWrapper>
+        </form>
+      </Section.Body>
     </Section>
   );
 }
